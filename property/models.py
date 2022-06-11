@@ -48,24 +48,61 @@ class Flat(models.Model):
         null=True,
         blank=True,
         db_index=True)
-    likes = models.ManyToManyField(User, blank=True)
+    likes = models.ManyToManyField(
+        User,
+        blank=True,
+        verbose_name="Лайки",
+        related_name="Квартиры, которые понравились",
+    )
 
     def __str__(self):
         return f'{self.town}, {self.address} ({self.price}р.)'
 
+
 class Likes_And_Complaints(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, verbose_name="Кто жаловался")
-    flat = models.ForeignKey(Flat, on_delete=models.CASCADE, verbose_name="Квартира, на которую пожаловались")
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        null=True,
+        verbose_name="Кто жаловался",
+        related_name="Ваши жалобы",
+    )
+    flat = models.ForeignKey(
+        Flat,
+        on_delete=models.CASCADE,
+        verbose_name="Квартира, на которую пожаловались",
+        related_name="Жалобы",
+    )
     complaint_text = models.TextField("Текст жалобы")
 
     class Meta:
         verbose_name_plural = "Likes_And_Complaints"
 
+
 class Owner(models.Model):
-    full_name = models.CharField('ФИО владельца', max_length=200, db_index=True)
-    owners_phonenumber = models.CharField('Номер владельца', max_length=20, db_index=True, null=True)
-    owner_pure_phone = PhoneNumberField('Нормализованный номер владельца', blank=True, null=True, db_index=True)
-    flats = models.ManyToManyField(Flat, blank=True, verbose_name="Квартиры в собственности", related_name="Владельцы")
+    full_name = models.CharField(
+        'ФИО владельца',
+        max_length=200,
+        db_index=True
+    )
+    owners_phonenumber = models.CharField(
+        'Номер владельца',
+        max_length=20,
+        db_index=True,
+        null=True
+    )
+    owner_pure_phone = PhoneNumberField(
+        'Нормализованный номер владельца',
+        blank=True,
+        null=True,
+        db_index=True
+    )
+    flats = models.ManyToManyField(
+        Flat,
+        blank=True,
+        verbose_name="Квартиры в собственности",
+        related_name="Владельцы"
+    )
 
     def __str__(self):
         return self.full_name
