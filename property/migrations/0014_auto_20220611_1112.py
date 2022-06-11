@@ -8,16 +8,18 @@ def create_owners(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
     for flat in Flat.objects.all():
         Owner.objects.get_or_create(
-            full_name=flat.owner_name,
-            owners_phonenumber=flat.owner_pure_phone,
-            owner_pure_phone=flat.owners_phonenumber,
+            full_name=flat.owner_name, 
+            defaults={
+                "owners_phonenumber": flat.owner_pure_phone,
+                "owner_pure_phone": flat.owners_phonenumber
+            },
         )
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('property', '0011_auto_20220610_2318'),
+        ('property', '0013_auto_20220611_1112'),
     ]
 
     operations = [
