@@ -7,7 +7,8 @@ import phonenumbers
 
 def parse_phone_number(apps, schema_editor):
     Flat = apps.get_model('property', 'Flat')
-    for flat in Flat.objects.all():
+    all_flats = Flat.objects.all()
+    for flat in all_flats.iterator():
         parsed_number = phonenumbers.parse(flat.owners_phonenumber, "RU")
         flat.owner_pure_phone = phonenumbers.format_number(
             parsed_number,
