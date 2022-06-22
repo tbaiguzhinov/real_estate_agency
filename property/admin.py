@@ -1,3 +1,4 @@
+from atexit import register
 from django.contrib import admin
 
 from .models import Flat, Likes_And_Complaints, Owner
@@ -8,6 +9,7 @@ class OwnersInline(admin.TabularInline):
     raw_id_fields = ("owner",)
 
 
+@admin.register(Flat)
 class FlatAdmin(admin.ModelAdmin):
     search_fields = ("town", "address")
     readonly_fields = ("created_at",)
@@ -24,13 +26,11 @@ class FlatAdmin(admin.ModelAdmin):
     inlines = [OwnersInline]
 
 
+@admin.register(Likes_And_Complaints)
 class Likes_And_ComplaintsAdmin(admin.ModelAdmin):
     raw_id_fields = ("user", "flat",)
 
 
+@admin.register(Owner)
 class OwnerAdmin(admin.ModelAdmin):
     raw_id_fields = ("flats",)
-
-admin.site.register(Flat, FlatAdmin)
-admin.site.register(Likes_And_Complaints, Likes_And_ComplaintsAdmin)
-admin.site.register(Owner, OwnerAdmin)
